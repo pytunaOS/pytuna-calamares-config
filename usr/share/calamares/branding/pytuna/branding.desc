@@ -121,14 +121,14 @@ navigation: widget
 # are visible as buttons there if the corresponding *show* keys
 # are set to "true" (they can also be overridden).
 strings:
-    productName:         "${NAME}"
-    shortProductName:    "${NAME}"
-    version:             "${BUILD_ID}"
-    shortVersion:        "${VERSION_ID}"
-    versionedName:       "${PRETTY_NAME} ${BUILD_ID}"
-    shortVersionedName:  "${NAME} ${VERSION_ID}"
-    bootloaderEntryName: "${NAME}"
-    productUrl:          "${HOME_URL}"
+    productName:         "pytunaOS GNU/Linux"
+    shortProductName:    "pytunaOS"
+    version:             "development"
+    shortVersion:        "2026.08"
+    versionedName:       "pytunaOS GNU/Linux 2026.08"
+    shortVersionedName:  "pytunaOS development"
+    bootloaderEntryName: "pytunaOS"
+    productUrl:          "https://github.com/pytunaOS"
     supportUrl:          https://github.com/pytunaOS
     knownIssuesUrl:      https://github.com/pytunaOS
     releaseNotesUrl:     https://github.com/pytunaOS
