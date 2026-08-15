@@ -120,19 +120,20 @@ navigation: widget
 # The *Url* entries are used on the welcome page, and they
 # are visible as buttons there if the corresponding *show* keys
 # are set to "true" (they can also be overridden).
+    
 strings:
-    productName:         "pytunaOS GNU/Linux"
-    shortProductName:    "pytunaOS"
-    version:             "development"
-    shortVersion:        "2026.08"
-    versionedName:       "pytunaOS GNU/Linux 2026.08"
-    shortVersionedName:  "pytunaOS development"
-    bootloaderEntryName: "pytunaOS"
-    productUrl:          "https://github.com/pytunaOS"
-    supportUrl:          https://github.com/pytunaOS
-    knownIssuesUrl:      https://github.com/pytunaOS
-    releaseNotesUrl:     https://github.com/pytunaOS
-    donateUrl:           https://github.com/pytunaOS
+    productName:         "${PRETTY_NAME}"
+    shortProductName:    "${NAME}"
+    version:             "${VARIANT_ID}"
+    shortVersion:        "${VERSION_ID}"
+    versionedName:       "${PRETTY_NAME} ${VERSION_ID} ${VARIANT}"
+    shortVersionedName:  "${NAME} ${VARIANT}"
+    bootloaderEntryName: "${NAME}"
+    productUrl:          "${HOME_URL}"
+    supportUrl:          "${SUPPORT_URL}"
+    knownIssuesUrl:      "${BUG_REPORT_URL}"
+    releaseNotesUrl:     "${HOME_URL}"
+    donateUrl:           "${HOME_URL}"
 
 # These images are loaded from the branding module directory.
 #
