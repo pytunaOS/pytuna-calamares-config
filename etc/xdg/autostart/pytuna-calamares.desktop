@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install pytunaOS
+Name[pt_BR]=Instalar o pytunaOS
+Comment=Install pytunaOS on this computer
+Comment[pt_BR]=Instalar o pytunaOS neste computador
+Exec=sh -c "sleep 3; exec pkexec calamares"
+Icon=calamares
+Terminal=false
+StartupNotify=true
+OnlyShowIn=KDE;
+X-KDE-autostart-after=panel
+X-GNOME-Autostart-enabled=true
