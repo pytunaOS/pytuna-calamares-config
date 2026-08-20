@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly config_dir="/etc/calamares"
+readonly active_config="${config_dir}/settings.conf"
+readonly offline_config="settings-offline.conf"
+readonly online_config="settings-online.conf"
+
+readonly pytuna_github_url="https://raw.githubusercontent.com/pytunaOS/repository/main/x86_64/pytuna.db"
+readonly pytuna_sourceforge_url="https://downloads.sourceforge.net/project/pytunaos-pkg-repo/x86_64/pytuna.db"
+readonly arch_url="https://geo.mirror.pkgbuild.com/core/os/x86_64/core.db"
+readonly chaotic_url="https://geo-mirror.chaotic.cx/chaotic-aur/x86_64/chaotic-aur.db"
+
+url_available() {
+    curl \
+        --fail \
+        --silent \
+        --show-error \
+        --location \
+        --max-time 12 \
+        --retry 1 \
+        --range 0-0 \
+        --output /dev/null \
+        "$1"
+}
+
+pytuna_repo_available() {
+    if url_available "${pytuna_github_url}"; then
+        logger -t pytuna-installer \
+            "pytunaOS repository available through GitHub"
+        return 0
+    fi
+
+    if url_available "${pytuna_sourceforge_url}"; then
+        logger -t pytuna-installer \
+            "pytunaOS repository available through SourceForge"
+        return 0
+    fi
+
+    logger -t pytuna-installer \
+        "all pytunaOS repository mirrors are unavailable"
+
+    return 1
+}
+
+select_mode() {
+    local pytuna_available=false
+    local arch_available=false
+    local chaotic_available=false
+
+    if pytuna_repo_available; then
+        pytuna_available=true
+    fi
+
+    if url_available "${arch_url}"; then
+        arch_available=true
+        logger -t pytuna-installer \
+            "Arch Linux repository is available"
+    else
+        logger -t pytuna-installer \
+            "Arch Linux repository is unavailable"
+    fi
+
+    if url_available "${chaotic_url}"; then
+        chaotic_available=true
+        logger -t pytuna-installer \
+            "Chaotic-AUR repository is available"
+    else
+        logger -t pytuna-installer \
+            "Chaotic-AUR repository is unavailable"
+    fi
+
+    if [[ "${pytuna_available}" == true &&
+          "${arch_available}" == true &&
+          "${chaotic_available}" == true ]]; then
+        printf '%s\n' "online"
+    else
+        printf '%s\n' "offline"
+    fi
+}
+
+main() {
+    local mode
+    local selected_config
+
+    mode="$(select_mode)"
+
+    case "${mode}" in
+        online)
+            selected_config="${online_config}"
+            ;;
+        offline)
+            selected_config="${offline_config}"
+            ;;
+        *)
+            printf 'pytuna-installer: modo inválido: %s\n' "${mode}" >&2
+            exit 1
+            ;;
+    esac
+
+    if [[ ! -r "${config_dir}/${selected_config}" ]]; then
+        printf 'pytuna-installer: configuração ausente: %s\n' \
+            "${config_dir}/${selected_config}" >&2
+        exit 1
+    fi
+
+    ln -sfn "${selected_config}" "${active_config}"
+
+    logger -t pytuna-installer \
+        "starting Calamares in ${mode} mode"
+
+    exec calamares
+}
+
+main "$@"
